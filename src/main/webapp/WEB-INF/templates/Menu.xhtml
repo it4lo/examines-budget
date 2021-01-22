@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<nav class="aw-menu">
+
+		<script type="text/javascript">
+			function start() {
+			    PF('statusDialog').show();
+			}
+			 
+			function stop() {
+			    PF('statusDialog').hide();
+			}
+			
+
+		</script>
+
+
+		<h:form>
+			<p:hotkey bind="ctrl+o" handler="PF('confirmacao_budget').show();" />
+			<p:hotkey bind="ctrl+e" handler="PF('confirmacao_exam').show();" />
+
+			<p:panelMenu style="margin-top:3px">
+				<p:submenu label="Orçamentos">
+					<p:menuitem value="Novo orçamento (Ctrl + O)" icon="fa fa-plus-circle" rendered="false"
+						onclick="PF('confirmacao_budget').show()" />
+					<p:menuitem action="#{menu_bean.mudarPagina('orcamentos')}"
+						onclick="start()" onerror="stop()" onsuccess="stop()"
+						update=":frm" value="Lista de orçamentos" icon="fa fa-list-ol" />
+				</p:submenu>
+
+
+
+				<p:submenu label="Exames">
+					<p:menuitem value="Novo exame (Ctrl + E)" icon="fa fa-plus-circle"
+						onclick="PF('confirmacao_exam').show()" rendered="false"/>
+					<p:menuitem action="#{menu_bean.mudarPagina('exames')}" 
+						onclick="start()" onerror="stop()" onsuccess="stop()"
+						update=":frm" value="Lista de exames" icon="fa fa-list-ol" />
+				</p:submenu>
+				
+				
+				<p:submenu label="Cadastros">
+					<p:menuitem action="#{menu_bean.mudarPagina('usuarios')}" 
+						onclick="start()" onerror="stop()" onsuccess="stop()"
+						update=":frm" value="Usuários" icon="fa fa-list-ol" />
+				</p:submenu>
+
+			</p:panelMenu>
+
+
+			<p:dialog style="padding:10px" widgetVar="confirmacao_budget"
+				modal="true" closeOnEscape="true" hideEffect="fade"
+				header="Confirmação" showEffect="fade">
+
+				<span>Inserir novo orçamento?</span>
+
+				<f:facet name="footer">
+					<p:commandButton onclick="start()" onerror="stop()"
+						onsuccess="stop()"
+						oncomplete="PF('confirmacao_budget').hide();"
+						action="#{menu_bean.mudarPagina('orcamento_cadastro')}"
+						value="Sim" icon="fa fa-check"></p:commandButton>
+					<p:commandButton onclick="PF('confirmacao_budget').hide();"
+						style="margin-left:2px" value="Não" icon="fa fa-close"></p:commandButton>
+				</f:facet>
+
+			</p:dialog>
+
+			<p:dialog style="padding:10px" widgetVar="confirmacao_exam"
+				modal="true" closeOnEscape="true" hideEffect="fade"
+				header="Confirmação" showEffect="fade">
+
+				<span>Inserir novo exame?</span>
+
+				<f:facet name="footer">
+					<p:commandButton onclick="start()" onerror="stop()"
+						onsuccess="stop()"
+						oncomplete="PF('confirmacao_exam').hide();"
+						action="#{menu_bean.mudarPagina('exame_cadastro')}"
+						value="Sim" icon="fa fa-check"></p:commandButton>
+					<p:commandButton onclick="PF('confirmacao_exam').hide();"
+						style="margin-left:2px" value="Não" icon="fa fa-close"></p:commandButton>
+				</f:facet>
+
+			</p:dialog>
+
+
+			<p:dialog modal="true" style="z-index:1000" widgetVar="statusDialog"
+				showHeader="false" draggable="false" closable="false"
+				resizable="false">
+				<p:graphicImage library="algaworks" name="images/aguarde.gif" />
+			</p:dialog>
+
+		</h:form>
+	</nav>
+
+</ui:composition>

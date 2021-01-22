@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml">
+
+	<ui:define name="lateral_menu">
+		<ui:include src="/WEB-INF/templates/Menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="frm" style="margin-top:5px">
+
+			<f:metadata>
+				<f:viewAction action="#{budget_bean.initList()}" />
+			</f:metadata>
+
+
+			<p:breadCrumb style="color:#FFF">
+				<p:menuitem value="" url="#" />
+				<p:menuitem value="Orçamentos" url="#" />
+				<p:menuitem value="Lista de orçamentos" url="#" />
+
+			</p:breadCrumb>
+
+			<p:panel>
+
+				<p:panelGrid columns="5" rendered="false"
+					style="text-align:center;padding-top:5px;padding-bottom:5px;"
+					styleClass="semBorda" layout="grid">
+					<f:facet name="header">
+						<div style="padding-top: 1px; padding-bottom: 25px; width: 100%;">
+							<h:outputText style="float:left;line-heght:50px"
+								value="Lista de orçamentos" />
+						</div>
+					</f:facet>
+					<h:outputText value="Número:" />
+					<p:inputText value="#{budget_bean.filtro.numero}" />
+
+					<p:commandLink style="color:#fff;width:125px"
+						styleClass="btn btn-primary btn-xs glyphicon glyphicon-search"
+						update="tbl_budget" action="#{budget_bean.filtrar()}"
+						onclick="start()" onsuccess="stop()" onerror="stop()">
+						<span style="font-family: Arial; margin-right: 15px">Buscar</span>
+					</p:commandLink>
+
+					<p:commandLink onclick="start()" onerror="stop()"
+						onsuccess="stop()" style="color:#fff;width:125px"
+						styleClass="btn btn-success btn-xs glyphicon glyphicon-floppy-saved"
+						action="#{menu_bean.mudarPagina('orcamento_cadastro')}">
+						<span style="font-family: Arial; margin-right: 15px">Novo</span>
+					</p:commandLink>
+
+
+				</p:panelGrid>
+				
+				<h:panelGroup styleClass="input-group" style="width:50%;">
+
+					<p:inputText value="#{budget_bean.filtro.numero}"
+						styleClass="form-control"/>
+					<p:commandLink
+						styleClass="input-addon-primary input-group-addon btn-primary"
+						update="tbl_budget" action="#{budget_bean.filtrar()}"
+						onclick="start()" onsuccess="stop()" onerror="stop()">
+
+						<span style="font-family: Arial; margin-right: 15px; color: #fff">Buscar</span>
+					</p:commandLink>
+
+					<p:commandLink styleClass="input-addon-success btn-success input-group-addon"
+						action="#{menu_bean.mudarPagina('orcamento_cadastro')}"
+						onclick="start()" onsuccess="stop()" onerror="stop()">
+
+						<span style="font-family: Arial; margin-right: 15px;color: #fff">+
+							Novo orçamento</span>
+					</p:commandLink>
+
+				</h:panelGroup>
+
+			</p:panel>
+
+
+			<p:dataTable id="tbl_budget" value="#{budget_bean.budgets}"
+				var="budget" paginator="true" reflow="true" rows="12"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+
+				<f:facet name="{Exporters}">
+
+					<h:commandLink rendered="false">
+						<p:graphicImage library="images" name="excel.png" width="24" />
+						<p:dataExporter type="xls" target="tbl_budget"
+							fileName="orçamentos" />
+					</h:commandLink>
+
+					<h:commandLink rendered="false">
+						<p:graphicImage library="images" name="pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="tbl" fileName="cars" />
+					</h:commandLink>
+
+				</f:facet>
+
+
+				<p:column headerText="ID" style="width:10%;text-align:center">
+					<h:outputText value="#{budget.numero}" />
+				</p:column>
+
+				<p:column headerText="Emissor" style="width:25%">
+					<h:outputText value="#{budget.user.name}" />
+				</p:column>
+
+				<p:column headerText="Empresa" style="width:25%">
+					<h:outputText value="#{budget.empresa}" />
+				</p:column>
+
+				<p:column headerText="Valor" style="width:65px">
+					<h:outputText value="#{budget.price}">
+						<f:convertNumber type="currency" maxFractionDigits="2"
+							currencySymbol="R$" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Valor com desconto"
+					style="width:165px;text-align:center">
+					<h:outputText value="#{budget.discountedPrice}">
+						<f:convertNumber type="currency" maxFractionDigits="2"
+							currencySymbol="R$" />
+					</h:outputText>
+				</p:column>
+
+
+				<p:column headerText="Ações" style="width:12%">
+					<p:panelGrid styleClass="semBorda" columns="4" style="width:100%">
+
+						<p:link
+							styleClass="btn btn-default btn-xs glyphicon glyphicon-edit"
+							onclick="start()" onerror="stop()" onsuccess="stop()"
+							outcome="/main/orcamento_cadastro">
+							<f:param name="bud" value="#{budget.id}" />
+						</p:link>
+
+
+						<p:commandLink target="_blank" style="color:#fff"
+							styleClass="btn btn-success btn-xs glyphicon glyphicon-print"
+							ajax="false" action="#{budget_bean.printBudget(budget)}">
+						</p:commandLink>
+
+
+						<p:commandLink oncomplete="PF('dlg_email').show();"
+							style="color:#fff"
+							styleClass="btn btn-primary btn-xs glyphicon glyphicon-envelope"
+							update=":frm_email" action="#{budget_bean.prepairEmail()}">
+							<f:setPropertyActionListener value="#{budget}"
+								target="#{budget_bean.budget}" />
+						</p:commandLink>
+
+
+						<p:commandLink onclick="start()" onerror="stop()"
+							onsuccess="stop()" update="tbl_budget" style="color:#fff"
+							styleClass="btn btn-danger btn-xs glyphicon glyphicon-remove-circle"
+							action="#{budget_bean.remove()}" icon="ui-icon-close">
+							<f:setPropertyActionListener value="#{budget}"
+								target="#{budget_bean.budget}" />
+							<p:confirm header="Confirmar exclusão" icon="ui-icon-alert"
+								message="Excluir orçamento?" />
+
+
+						</p:commandLink>
+
+
+
+
+					</p:panelGrid>
+				</p:column>
+
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+
+	</ui:define>
+
+	<ui:define name="adicionais">
+		<p:dialog widgetVar="dlg_email" width="40%" modal="true"
+			closable="true" closeOnEscape="true" header="Envio de orçamento">
+			<h:form id="frm_email">
+				<p:messages id="msg" showDetail="true" showSummary="false"
+					showIcon="true" closable="true" />
+				<p:panelGrid columns="2" style="width:100%">
+					<p:outputLabel value="Email:" />
+					<p:inputText value="#{budget_bean.email.toEmail}" style="width:96%" />
+
+					<p:outputLabel value="Texto:" />
+					<p:inputTextarea rows="6" value="#{budget_bean.email.content}"
+						style="width:96%" />
+				</p:panelGrid>
+				<p:separator></p:separator>
+				<div style="width: 100%; text-align: center;">
+					<p:commandButton update=":frm_email:msg" onclick="start()"
+						onerror="stop()" onsuccess="stop()" value="Enviar"
+						action="#{budget_bean.sendBudget()}" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,188 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<h:form>
+		
+			<p:commandButton type="button" value="Primary test"
+										style="margin-bottom:10px;" />
+		
+			<div class="ui-fluid">
+			
+				<div class="ui-g">
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>Forms</h1>
+							<p:panelGrid columns="3" layout="grid"
+								styleClass="ui-panelgrid-blank">
+								<p:selectOneRadio id="plano" value="#{budget_bean.enumType}">
+									<f:selectItem itemLabel="Bronze" itemValue="PRICE_BRONZE" />
+									<f:selectItem itemLabel="Prata" itemValue="PRICE_SILVER" />
+									<f:selectItem itemLabel="Ouro" itemValue="PRICE_GOLD" />
+									<f:selectItem itemLabel="Diamante" itemValue="PRICE_DIAMOND" />
+									<f:selectItem itemLabel="Particular"
+										itemValue="PRICE_PARTICULAR" />
+
+
+								</p:selectOneRadio>
+
+								<p:autoComplete id="examInput_tbl" size="50" style="width:96%"
+									placeholder="Digite o nome do exame"
+									value="#{budget_bean.budgetExam.exam}"
+									completeMethod="#{budget_bean.completeExam}" var="exam"
+									itemLabel="#{exam.name}" itemValue="#{exam}"
+									converter="examConverter" forceSelection="true">
+								</p:autoComplete>
+
+
+								<p:inputText placeholder="Email" />
+								<p:inputText placeholder="Phone" />
+
+								<p:inputText placeholder="Disabled" disabled="true" />
+								<p:inputText placeholder="Readonly" readonly="true" />
+								<p:inputText placeholder="Invalid" styleClass="ui-state-error" />
+							</p:panelGrid>
+						</div>
+					</div>
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>Checkboxes</h1>
+							<p:selectManyCheckbox layout="responsive" columns="6">
+								<f:selectItem itemLabel="Ultima" itemValue="Ultima" />
+								<f:selectItem itemLabel="Serenity" itemValue="Serenity" />
+								<f:selectItem itemLabel="Apollo" itemValue="Apollo" />
+								<f:selectItem itemLabel="Verona" itemValue="Verona" />
+							</p:selectManyCheckbox>
+						</div>
+					</div>
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>ListBox</h1>
+							<p:selectOneListbox id="listbox" filter="true">
+								<f:selectItem itemLabel="Ultima" itemValue="Ultima" />
+								<f:selectItem itemLabel="Harmony" itemValue="Harmony" />
+								<f:selectItem itemLabel="Apollo" itemValue="Apollo" />
+								<f:selectItem itemLabel="Atlantis" itemValue="Atlantis" />
+								<f:selectItem itemLabel="Paradise" itemValue="Paradise" />
+							</p:selectOneListbox>
+						</div>
+					</div>
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>Breadcrumb</h1>
+							<p:breadCrumb>
+								<p:menuitem value="Categories" url="#" />
+								<p:menuitem value="Sports" url="#" />
+								<p:menuitem value="Basketball" url="#" />
+								<p:menuitem value="NBA" url="#" />
+								<p:menuitem value="Teams" url="#" />
+								<p:menuitem value="L.A. Lakers" url="#" />
+								<p:menuitem value="Roster" url="#" />
+								<p:menuitem value="Kobe Bryant" url="#" />
+							</p:breadCrumb>
+						</div>
+					</div>
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>Buttons</h1>
+							<p>Raised, Flat and Rounded buttons with various severity
+								alternatives.</p>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-4" style="text-align: center">
+									<p:commandButton type="button" value="Primary"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Secondary"
+										styleClass="secondary-button" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Success"
+										styleClass="success-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Warning"
+										styleClass="warning-btn" style="margin-bottom:10px;" />
+
+									<p:commandButton type="button" value="Info"
+										styleClass="info-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Help"
+										styleClass="help-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Danger"
+										styleClass="danger-btn" style="margin-bottom:10px;" />
+								</div>
+
+								<div class="ui-g-12 ui-md-4" style="text-align: center">
+									<p:commandButton type="button" value="Primary"
+										style="margin-bottom:10px;" styleClass="raised-btn" />
+									<p:commandButton type="button" value="Secondary"
+										styleClass="secondary-button raised-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Success"
+										styleClass="success-btn raised-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Warning"
+										styleClass="warning-btn raised-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Info"
+										styleClass="info-btn raised-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Help"
+										styleClass="help-btn raised-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Danger"
+										styleClass="danger-btn raised-btn" style="margin-bottom:10px;" />
+								</div>
+
+								<div class="ui-g-12 ui-md-4" style="text-align: center">
+									<p:commandButton type="button" value="Primary"
+										style="margin-bottom:10px;" styleClass="rounded-btn" />
+									<p:commandButton type="button" value="Secondary"
+										styleClass="secondary-button rounded-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Success"
+										styleClass="success-btn rounded-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Warning"
+										styleClass="warning-btn rounded-btn"
+										style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Info"
+										styleClass="info-btn rounded-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Help"
+										styleClass="help-btn rounded-btn" style="margin-bottom:10px;" />
+									<p:commandButton type="button" value="Danger"
+										styleClass="danger-btn rounded-btn"
+										style="margin-bottom:10px;" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-g-12">
+						<div class="card card-w-title">
+							<h1>TabView</h1>
+							<p:tabView>
+								<p:tab title="Godfather Part I">
+									<h:outputText
+										value="The story begins as Don Vito Corleone. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                                        Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat. The story begins as Don Vito Corleone. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                                        Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat. Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat. Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat. Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat." />
+								</p:tab>
+								<p:tab title="Godfather Part II">
+									<h:outputText
+										value="Francis Ford Coppola's legendary. Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The Godfather's depiction of the dark side of the American dream.
+                                                  In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
+                                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
+								</p:tab>
+								<p:tab title="Godfather Part III" closable="true">
+									<h:outputText
+										value="After a break of more than 15 years. Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The Godfather's depiction of the dark side of the American dream.
+                                                  Aenean blandit tortor a ipsum vehicula, in semper sapien auctor. Nulla tempor eget est non consequat, legally or illegally, for his wife and growing brood in Little Italy,
+                                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
+								</p:tab>
+							</p:tabView>
+						</div>
+					</div>
+					<div class="ui-g-12"></div>
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</f:facet>
+
+	<title>Master Saúde</title>
+
+	<h:outputStylesheet library="algaworks" name="styles/custom.css" />
+	<h:outputStylesheet library="algaworks" name="styles/layout.css" />
+	<h:outputStylesheet library="algaworks" name="styles/components.css" />
+	<h:outputScript target="body" library="js" name="mascaras.js" />
+
+	<link rel="stylesheet"
+		href="../resources/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../resources/bootsnip/css/style.css" />
+
+	<h:outputScript target="body" library="primefaces"
+		name="jquery/jquery.js" />
+	<h:outputScript target="body" library="algaworks"
+		name="javascripts/app.js" />
+
+
+
+
+
+	<link rel="stylesheet"
+		href="../resources/bootstrap/css/bootstrap.min.css" />
+</h:head>
+
+
+
+<h:body>
+
+
+
+<style type="text/css">
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #333;
+	background: #fff5f5;
+	/*     background-color: #e6d3d36e; */
+}
+
+.label-cad{
+  margin-left:3px;
+  padding-bottom: 10px
+}
+
+.input-addon-primary {
+		padding: 4px 12px;
+		font-weight: 400;
+		line-height: 0;
+		color: #fff;
+		text-align: center;
+		background-color: #337ab7;
+		border: 1px solid #2e6da4;
+		border-radius: 20px;
+}
+
+.input-addon-success {
+		padding: 4px 12px;
+		font-weight: 400;
+		line-height: 0;
+		color: #fff;
+		text-align: center;
+		background-color: #5cb85c;
+		border: 1px solid #4cae4c;
+		border-radius: 5px;
+		
+}
+
+.ui-datatable-odd {
+	background-color: #f3dace !important;
+}
+
+.ui-widget-content {
+	border: 1px solid #dddddd !important;
+	background: #fff5f5;
+	color: #333333;
+}
+
+
+.ui-widget {
+	font-size: 75%;
+}
+
+
+
+.ui-corner-all {
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 0px;
+}
+
+.ui-panelmenu .ui-panelmenu-header a {
+	color: #FFF;
+	background: #0088cc;
+}
+
+.ui-widget-header {
+	border: 1px solid #0088cc;
+	background: #0088cc;
+	color: #fff;
+	font-weight: bold;
+}
+
+.semBorda tr, .semBorda td {
+	border: none !important;
+}
+</style>
+
+	<script type="text/javascript">
+			function start() {
+			    PF('statusDialog').show();
+			}
+			 
+			function stop() {
+			    PF('statusDialog').hide();
+			}
+	</script>
+
+	<header class="aw-topbar"
+		style="background-image: url('../resources/images/background_h.jpg');">
+		
+		<h:form id="frm_logout">
+		
+			<p:commandLink styleClass="aw-toggle"
+				action="#{loginBean.logout}" style="color: #FFF; font-size: 22px;float:right;margin-right:27px">
+				<span class="fa fa-power-off"></span>
+			</p:commandLink>
+		</h:form>	
+			
+
+		
+		<a href="#" class="aw-toggle  js-toggle"
+			style="color: #FFF; font-size: 22px"><i class="fa  fa-bars"></i></a>
+		
+		<h:graphicImage rendered="false" library="images" name="logo_ms.png"
+			style="width:200px;height:30px;float:left;" />
+
+		
+	</header>
+
+	<aside class="aw-sidebar  js-sidebar">
+
+		<ui:insert name="lateral_menu" />
+
+	</aside>
+
+	<section class="aw-content  js-content">
+
+		<ui:insert name="content" />
+
+	</section>
+
+	<ui:insert name="adicionais">
+
+		<p:dialog modal="true" style="z-index:1000" widgetVar="statusDialog"
+			showHeader="false" draggable="false" closable="false"
+			resizable="false">
+			<p:graphicImage library="algaworks" name="images/aguarde.gif" />
+		</p:dialog>
+
+	</ui:insert>
+
+</h:body>
+
+</html>

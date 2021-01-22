@@ -1,0 +1,538 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/LayoutFullPage.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+
+
+	<ui:define name="content">
+
+
+		<script type="text/javascript">
+			function start() {
+			    PF('statusDialog').show();
+			}
+			 
+			function stop() {
+			    PF('statusDialog').hide();
+			}
+			
+
+		</script>
+
+
+		<link rel="stylesheet"
+			href="../resources/bootstrap/css/bootstrap.min.css" />
+
+		<link rel="stylesheet" href="../resources/bootsnip/css/style.css" />
+
+		<f:metadata>
+			<o:viewParam name="bud" value="#{budget_bean.budget}" />
+			<f:viewAction action="#{budget_bean.initCadastro()}" />
+		</f:metadata>
+
+		<style type="text/css">
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #333;
+	background: #fff5f5;
+	/*     background-color: #e6d3d36e; */
+}
+
+.input-addon-primary {
+	padding: 12px 12px;
+	font-weight: 400;
+	line-height: 0;
+	color: #fff;
+	text-align: center;
+	background-color: #337ab7;
+	border: 1px solid #2e6da4;
+	border-radius: 20px;
+}
+
+.input-addon-success {
+	padding: 4px 12px;
+	font-weight: 400;
+	line-height: 0;
+	color: #fff;
+	text-align: center;
+	background-color: #5cb85c;
+	border: 1px solid #4cae4c;
+	border-radius: 5px;
+}
+</style>
+
+
+
+		<h:form id="frm">
+
+			<p:hotkey bind="ctrl+return" update="tbl_budget"
+				action="#{budget_bean.createTuple()}" />
+
+
+			<p:hotkey bind="ctrl+insert"
+				handler="PF('dlg_password_general').show();"
+				actionListener="#{budget_bean.saveOn()}" />
+
+			<p:hotkey bind="ctrl+s" onstart="start()" onsuccess="stop()"
+				onerror="stop()" action="#{budget_bean.save()}" />
+
+			<p:hotkey bind="ctrl+f"
+				update=":frm:tbl_budget :frm:tbl_budget:panel_valores"
+				onstart="start()" onsuccess="stop()" onerror="stop()"
+				action="#{budget_bean.atualizarLista()}" />
+
+			<p:hotkey bind="F5" onstart="start()" onsuccess="stop()"
+				onerror="stop()" action="#{budget_bean.atualizarLista()}" />
+
+			<p:breadCrumb style="margin-bottom:3px;margin-top:50px;color:#FFF">
+				<p:menuitem value="" url="#" />
+				<p:menuitem value="Orçamentos" url="#" />
+				<p:menuitem value="Cadastro de orçamentos" url="#" />
+
+			</p:breadCrumb>
+
+
+			<p:panel id="cadastro">
+
+				<p:panelGrid columns="1" styleClass="semBorda" style="width:50%">
+
+					<h:panelGroup>
+						<h:outputText value="Emissão:" />
+						<h:outputLabel value="#{budget_bean.budget.issueDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss "
+								timeZone="America/Manaus" />
+						</h:outputLabel>
+
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText value="Orçamento Nº:" styleClass="label-cad" />
+						<p:outputLabel value="#{budget_bean.budget.numero}" />
+					</h:panelGroup>
+
+
+					<h:panelGroup>
+						<h:outputText value="Empresa/Cliente:" styleClass="label-cad" />
+						<p:inputText value="#{budget_bean.budget.empresa}"
+							styleClass="form-control" />
+					</h:panelGroup>
+
+
+
+
+					<h:panelGroup>
+						<h:outputText id="Ac" value="Ac:" styleClass="label-cad" />
+						<p:inputText value="#{budget_bean.budget.contact}"
+							styleClass="form-control" />
+
+					</h:panelGroup>
+
+
+
+					<p:panelGrid columns="3">
+						<h:panelGroup>
+							<h:outputText style="margin-left:3px;margin-right:3px"
+								value="Telefone:" />
+							<p:inputMask mask="(99) 9999-9999" styleClass="form-control"
+								value="#{budget_bean.budget.cellPhone}" />
+
+						</h:panelGroup>
+
+
+						<h:panelGroup>
+							<h:outputText value="Dias para validade:" />
+							<p:inputText styleClass="form-control"
+								value="#{budget_bean.budget.diasValidade}"></p:inputText>
+
+						</h:panelGroup>
+
+						<p:panelGrid columns="2">
+							<h:outputText
+								value="Mostrar 'Descrição' e 'Observação' na tabela?" />
+							<p:inputSwitch value="#{budget_bean.budget.showColumns}"
+								offLabel="Não" onLabel="Sim">
+								<p:ajax update=":frm:tbl_budget" />
+							</p:inputSwitch>
+
+						</p:panelGrid>
+
+
+
+
+
+					</p:panelGrid>
+
+					<p:panelGrid id="panel_info" columns="8">
+
+						<h:outputText style="float:right" for="plano"
+							value="Tabela de preços:" />
+						<p:selectOneRadio id="plano" value="#{budget_bean.enumType}"
+							styleClass="form-control">
+							<f:selectItem itemLabel="Bronze" itemValue="PRICE_BRONZE" />
+							<f:selectItem itemLabel="Prata" itemValue="PRICE_SILVER" />
+							<f:selectItem itemLabel="Ouro" itemValue="PRICE_GOLD" />
+							<f:selectItem itemLabel="Diamante" itemValue="PRICE_DIAMOND" />
+							<f:selectItem itemLabel="Particular" itemValue="PRICE_PARTICULAR" />
+
+							<p:ajax listener="#{budget_bean.atualizarLista()}"
+								update=":frm:tbl_budget :frm:tbl_budget:panel_valores" />
+						</p:selectOneRadio>
+					</p:panelGrid>
+
+
+
+				</p:panelGrid>
+
+
+
+
+
+
+
+
+
+			</p:panel>
+
+
+			<p:panel id="exame" rendered="#{budget_bean.budget.id != null}" header="Insira os exames referente ao orçamento"
+				style="margin-bottom:3px;">
+
+				<h:panelGrid id="panel_item" columns="3" style="margin-bottom:5px;">
+
+					<p:autoComplete id="examInput_tbl"
+						placeholder="Digite o nome do exame" size="60"
+						value="#{budget_bean.budgetExam.exam}"
+						completeMethod="#{budget_bean.completeExam}" var="exam"
+						itemLabel="#{exam.name}" itemValue="#{exam}"
+						converter="examConverter" forceSelection="true">
+					</p:autoComplete>
+
+					<p:commandLink
+						update=":frm:panel_info :frm:tbl_budget examInput_tbl panel_item"
+						action="#{budget_bean.saveTuple()}"
+						styleClass="input-addon-primary input-group-addon btn-primary"
+						style="color:#fff;">
+						<span style="font-family: Arial; margin-right: 15px">Adicionar</span>
+					</p:commandLink>
+
+					<p:focus context="panel_item" />
+
+				</h:panelGrid>
+
+				<p:dataTable id="tbl_budget" style="clear:left;" editable="true" paginator="true" rows="10"
+					rowIndexVar="indexRow" editMode="cell" widgetVar="cellItens"
+					value="#{budget_bean.tuples}" var="tups" reflow="true">
+
+					<p:ajax event="cellEdit" process=":frm:panel_info :frm:tbl_budget"
+						update=":frm:panel_info :frm:tbl_budget"
+						listener="#{budget_bean.saveTuple(tups, indexRow)}">
+
+					</p:ajax>
+
+					<p:ajax event="cellEdit" listener="#{budget_bean.verifySave}">
+
+					</p:ajax>
+
+					<p:column headerText="Quant." style="width:55px">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tups.amount}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="amountInput" value="#{tups.amount}"
+									style="width:96%">
+									<p:ajax event="blur"
+										update="tbl_budget :frm:tbl_budget:panel_valores" />
+
+								</p:inputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Exame">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tups.exam.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:focus context="examInput" />
+								<p:autoComplete id="examInput" style="width:96%"
+									value="#{tups.exam}"
+									completeMethod="#{budget_bean.completeExam}" var="exam"
+									itemLabel="#{exam.name}" itemValue="#{exam}"
+									converter="examConverter" forceSelection="true">
+
+									<p:ajax update="tbl_budget :frm:tbl_budget:panel_valores" />
+								</p:autoComplete>
+
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column rendered="#{budget_bean.budget.showColumns}"
+						headerText="Descrição">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tups.description}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputTextarea rows="5" value="#{tups.description}"
+									style="width:96%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column rendered="#{budget_bean.budget.showColumns}"
+						headerText="Observação">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tups.note}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputTextarea rows="5" value="#{tups.note}" style="width:96%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Valor Unit." style="width:75px">
+						<h:outputText value="#{tups.unitPrice}">
+							<f:convertNumber type="currency" maxFractionDigits="2"
+								currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Desconto" style="width:75px">
+						<h:outputText value="#{tups.discount}">
+							<f:convertNumber type="currency" maxFractionDigits="2"
+								currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Valor" style="width:75px">
+						<h:outputText value="#{tups.price}">
+							<f:convertNumber type="currency" maxFractionDigits="2"
+								currencySymbol="R$" />
+						</h:outputText>
+					</p:column>
+
+
+
+
+					<p:column headerText="Ações" style="width:115px">
+						<p:panelGrid columns="2" styleClass="semBorda" style="width:100%">
+							<p:commandLink style="color:#fff"
+								styleClass="btn btn-danger btn-xs glyphicon glyphicon-remove-circle"
+								update="tbl_budget :frm:tbl_budget:panel_valores"
+								action="#{budget_bean.removerTuple(tups)}" process="@this">
+							</p:commandLink>
+
+							<p:commandLink update=":frm_password"
+								action="#{budget_bean.prepairDiscount(tups, indexRow)}"
+								process="@this"
+								styleClass="btn btn-warning btn-xs glyphicon glyphicon-usd">
+							</p:commandLink>
+
+						</p:panelGrid>
+					</p:column>
+
+					<f:facet name="footer">
+
+						<p:panelGrid id="panel_valores" columns="9"
+							style="text-align:center;padding-top:15px;padding-bottom:5px;float:right"
+							layout="grid">
+							<p:outputLabel value="Total:" style="font-size:16px;" />
+							<h:outputLabel value="#{budget_bean.budget.price}"
+								style="font-size:16px">
+								<f:convertNumber type="currency" maxFractionDigits="2"
+									currencySymbol="R$" />
+							</h:outputLabel>
+							<p:outputLabel value="|" />
+
+							<h:outputLabel value="Descontos:" style="font-size:16px" />
+							<h:outputLabel value="#{budget_bean.budget.discount}"
+								style="font-size:16px">
+								<f:convertNumber type="currency" maxFractionDigits="2"
+									currencySymbol="R$" />
+							</h:outputLabel>
+							<p:outputLabel value="|" />
+
+							<h:outputLabel value="Valor total:" style="font-size:16px" />
+							<h:outputLabel value="#{budget_bean.budget.discountedPrice}"
+								style="font-size:16px">
+								<f:convertNumber type="currency" maxFractionDigits="2"
+									currencySymbol="R$" />
+							</h:outputLabel>
+
+						</p:panelGrid>
+
+					</f:facet>
+
+				</p:dataTable>
+
+
+			</p:panel>
+
+			<p:contextMenu for="tbl_budget" widgetVar="cMenu">
+				<p:menuitem value="Edit Cell" icon="pi pi-search"
+					onclick="PF('cellItens').showCellEditor();return false;" />
+				<p:menuitem value="Hide Menu" icon="pi pi-times"
+					onclick="PF('cMenu').hide()" />
+			</p:contextMenu>
+
+
+			<div style="width: 100%; text-align: center; clear: right">
+
+				<p:commandLink onclick="start()" rendered="#{budget_bean.budget.id == null}"
+					styleClass="btn btn-primary btn-xs glyphicon glyphicon-floppy-saved"
+					onerror="stop()" onsuccess="stop()" update=":frm exame"
+					style="color:#fff;width:125px;margin:5px"
+					action="#{budget_bean.saveOn()}">
+					<span style="font-family: Arial; margin-right: 15px">Salvar</span>
+				</p:commandLink>
+				
+				
+				<p:commandLink onclick="start()" rendered="#{budget_bean.budget.id != null}"
+					styleClass="btn btn-primary btn-xs glyphicon glyphicon-floppy-saved"
+					onerror="stop()" onsuccess="stop()"
+					style="color:#fff;width:125px;margin:5px"
+					action="#{budget_bean.save()}">
+					<span style="font-family: Arial; margin-right: 15px">Salvar</span>
+				</p:commandLink>
+
+
+				<p:commandLink process="@this" onclick="start()" onerror="stop()"
+					styleClass="btn btn-danger btn-xs glyphicon glyphicon-floppy-remove"
+					onsuccess="stop()" style="color:#fff;width:125px;margin-left:5px"
+					action="#{budget_bean.cancelar()}">
+					<span style="font-family: Arial; margin-right: 15px">Cancelar</span>
+				</p:commandLink>
+			</div>
+		</h:form>
+
+
+	</ui:define>
+
+	<ui:define name="adicionais">
+
+		<p:dialog widgetVar="dlg_password" header="Senha" modal="true"
+			closable="true" closeOnEscape="true">
+			<h:form id="frm_password">
+				<p:panel id="panel">
+					<p:focus context="panel" />
+
+					<p:messages showDetail="true"></p:messages>
+					<p:panelGrid columns="2">
+						<p:password value="#{budget_bean.password}" />
+						<p:commandButton update="frm_password :frm_discount"
+							value="enviar" action="#{budget_bean.verificarSenha()}" />
+					</p:panelGrid>
+
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
+
+
+
+		<p:dialog widgetVar="dlg_discount" showHeader="true" header="Desconto"
+			modal="true" closable="true" closeOnEscape="true">
+
+			<h:form id="frm_discount">
+				<p:panel id="panel">
+					<p:focus context="panel" />
+					<p:panelGrid>
+						<p:outputLabel value="Desconto:" />
+						<p:inputText value="#{budget_bean.tuple.discount}"
+							onkeypress="return formatarNumero(this,event,19,2);">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+								locale="pt_BR" />
+						</p:inputText>
+					</p:panelGrid>
+
+					<div style="width: 100%; text-align: center; clear: right">
+						<p:commandButton
+							update=":frm:tbl_budget :frm:tbl_budget:panel_valores"
+							onclick="start()" onerror="stop()"
+							oncomplete="PF('dlg_discount').hide();" onsuccess="stop()"
+							style="margin:10px" value="Salvar"
+							action="#{budget_bean.saveDiscount()}"></p:commandButton>
+						<p:commandButton onclick="PF('dlg_discount').hide();"
+							process="@this" style="margin:10px" value="Cancelar" />
+					</div>
+
+				</p:panel>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlg_password_general" header="Senha" modal="true"
+			closable="true" closeOnEscape="true">
+			<h:form id="frm_password_general">
+				<p:panel id="panel">
+					<p:focus context="panel" />
+					<p:messages showDetail="true"></p:messages>
+					<p:panelGrid columns="2">
+						<p:password value="#{budget_bean.password}" />
+						<p:commandButton
+							update="frm_password_general :frm_discount_general"
+							value="enviar" action="#{budget_bean.verificarSenhaGeral()}" />
+					</p:panelGrid>
+
+				</p:panel>
+			</h:form>
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlg_discount_general" showHeader="true"
+			header="Desconto geral" modal="true" closable="true"
+			closeOnEscape="true">
+
+			<h:form id="frm_discount_general">
+				<p:panel id="panel">
+					<p:focus context="panel" />
+					<p:panelGrid>
+						<p:outputLabel value="Desconto:" />
+						<p:inputText value="#{budget_bean.budget.discountGeneral}"
+							onkeypress="return formatarNumero(this,event,19,2);">
+							<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+								locale="pt_BR" />
+						</p:inputText>
+					</p:panelGrid>
+
+					<div style="width: 100%; text-align: center; clear: right">
+						<p:commandButton
+							update=":frm:tbl_budget :frm:tbl_budget:panel_valores"
+							onclick="start()" onerror="stop()"
+							oncomplete="PF('dlg_discount_general').hide();"
+							onsuccess="stop()" style="margin:10px" value="Salvar"
+							action="#{budget_bean.saveOn()}" />
+						<p:commandButton onclick="PF('dlg_discount_general').hide();"
+							process="@this" style="margin:10px" value="Cancelar" />
+					</div>
+
+				</p:panel>
+
+			</h:form>
+
+
+
+		</p:dialog>
+
+		<p:dialog modal="true" style="z-index:1000" widgetVar="statusDialog"
+			showHeader="false" draggable="false" closable="false"
+			resizable="false">
+			<p:graphicImage library="algaworks" name="images/aguarde.gif" />
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

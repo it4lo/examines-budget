@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="lateral_menu">
+		<ui:include src="/WEB-INF/templates/Menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="frm" style="margin-top:5px">
+
+			<f:metadata>
+				<o:viewParam name="ex" value="#{exam_bean.exam}" />
+			</f:metadata>
+
+
+			<p:breadCrumb style="color:#FFF">
+				<p:menuitem value="" url="#" />
+				<p:menuitem value="Exames" url="#" />
+				<p:menuitem value="Cadastro de exames" url="#" />
+
+			</p:breadCrumb>
+
+			<p:panel id="panel" style="margin-bottom:5px">
+
+				<p:panelGrid columns="1" style="width:50%;margin-left:15px"
+					styleClass="semBorda">
+
+					<h:outputText value="Nome:" styleClass="label-cad" />
+					<p:inputText value="#{exam_bean.exam.name}"
+						styleClass="form-control" />
+
+					<h:outputText value="Descrição:" styleClass="label-cad" />
+					<p:inputTextarea styleClass="form-control"
+						value="#{exam_bean.exam.description}" />
+
+
+
+					<p:panelGrid columns="4">
+
+						<h:panelGroup styleClass="input-group">
+							<h:outputText value="Valor bronze:" styleClass="label-cad" />
+							<p:inputText styleClass="form-control"
+								value="#{exam_bean.exam.bronzeValue}"
+								onkeypress="return formatarNumero(this,event,19,2);">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+									locale="pt_BR" />
+							</p:inputText>
+
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="input-group">
+							<h:outputText value="Valor prata:" styleClass="label-cad" />
+							<p:inputText value="#{exam_bean.exam.silverValue}"
+								styleClass="form-control"
+								onkeypress="return formatarNumero(this,event,19,2);">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+									locale="pt_BR" />
+							</p:inputText>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="input-group">
+							<h:outputText value="Valor ouro:" styleClass="label-cad" />
+							<p:inputText value="#{exam_bean.exam.goldValue}"
+								styleClass="form-control"
+								onkeypress="return formatarNumero(this,event,19,2);">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+									locale="pt_BR" />
+							</p:inputText>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="input-group">
+							<h:outputText value="Valor diamante:" styleClass="label-cad" />
+							<p:inputText value="#{exam_bean.exam.diamondValue}"
+								styleClass="form-control"
+								onkeypress="return formatarNumero(this,event,19,2);">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+									locale="pt_BR" />
+							</p:inputText>
+
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="input-group">
+
+							<h:outputText value="Valor particular:" styleClass="label-cad" />
+							<p:inputText value="#{exam_bean.exam.particularValue}"
+								styleClass="form-control"
+								onkeypress="return formatarNumero(this,event,19,2);">
+								<f:convertNumber minFractionDigits="2" maxFractionDigits="2"
+									locale="pt_BR" />
+							</p:inputText>
+
+						</h:panelGroup>
+
+					</p:panelGrid>
+
+
+					<h:outputText value="Observação:" styleClass="label-cad" />
+					<p:inputTextarea styleClass="form-control"
+						value="#{exam_bean.exam.note}" />
+
+
+
+
+
+					<f:facet name="footer">
+
+					</f:facet>
+
+
+				</p:panelGrid>
+
+			</p:panel>
+			<div style="width: 100%; margin-left: 25px">
+				<p:commandLink onclick="start()"
+					styleClass="btn btn-primary btn-xs glyphicon glyphicon-floppy-saved"
+					onerror="stop()" onsuccess="stop()"
+					style="color:#fff;width:125px;margin:5px"
+					action="#{exam_bean.save()}">
+					<span style="font-family: Arial; margin-right: 15px">Salvar</span>
+				</p:commandLink>
+
+
+				<p:commandLink process="@this" onclick="start()" onerror="stop()"
+					styleClass="btn btn-danger btn-xs glyphicon glyphicon-floppy-remove"
+					onsuccess="stop()" style="color:#fff;width:125px;margin-left:5px"
+					action="#{exam_bean.cancelar()}">
+					<span style="font-family: Arial; margin-right: 15px">Cancelar</span>
+				</p:commandLink>
+			</div>
+
+
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

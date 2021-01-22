@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="lateral_menu">
+		<ui:include src="/WEB-INF/templates/Menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<script type="text/javascript">
+			function start() {
+			    PF('statusDialog').show();
+			}
+			 
+			function stop() {
+			    PF('statusDialog').hide();
+			}
+	</script>
+<style type="text/css">
+	
+</style>
+
+
+		<h:form id="frm" style="margin-top:5px">
+
+			<f:metadata>
+				<f:viewAction action="#{exam_bean.initList()}" />
+			</f:metadata>
+
+
+			<p:breadCrumb style="color:#FFF">
+				<p:menuitem value="" url="#" />
+				<p:menuitem value="Exames" url="#" />
+				<p:menuitem value="Lista de exames" url="#" />
+
+			</p:breadCrumb>
+
+			<p:panel id="basic" style="margin-bottom:3px;clear:both">
+
+
+
+				<p:panelGrid columns="5" rendered="false"
+					style="padding-top:5px;padding-bottom:5px;width:50%;float:right;clear:both"
+					styleClass="semBorda">
+
+
+
+
+
+				</p:panelGrid>
+
+				<h:panelGroup styleClass="input-group" style="width:50%;">
+
+					<p:inputText value="#{exam_bean.filtro.name}"
+						styleClass="form-control" />
+					<p:commandLink
+						styleClass="input-addon-primary input-group-addon btn-primary"
+						update="tbl_exam" action="#{exam_bean.filtrar()}"
+						onclick="start()" onsuccess="stop()" onerror="stop()">
+
+						<span style="font-family: Arial; margin-right: 15px; color: #fff">Buscar</span>
+					</p:commandLink>
+
+					<p:commandLink styleClass="input-addon-success btn-success input-group-addon"
+						update="tbl_exam" action="#{menu_bean.mudarPagina('exame_cadastro')}"
+						onclick="start()" onsuccess="stop()" onerror="stop()">
+
+						<span style="font-family: Arial; margin-right: 15px;color: #fff">+
+							Novo exame</span>
+					</p:commandLink>
+
+				</h:panelGroup>
+
+
+
+			</p:panel>
+
+			<p:dataTable id="tbl_exam" value="#{exam_bean.exames}" var="exam"
+				style="clear:both" paginator="true" reflow="true" rows="12"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+
+
+
+
+				<p:column headerText="ID" style="width:5%;text-align:center">
+					<h:outputText value="#{exam.id}" />
+				</p:column>
+
+				<p:column headerText="Nome" style="width:15%">
+					<h:outputText value="#{exam.name}" />
+				</p:column>
+
+				<p:column headerText="Descrição" style="width:25%">
+					<h:outputText value="#{exam.description}" />
+				</p:column>
+
+				<p:column headerText="Observação" style="width:25%">
+					<h:outputText value="#{exam.note}" />
+				</p:column>
+
+				<p:column exportable="false" headerText="Ações" style="width:90px">
+					<p:panelGrid styleClass="semBorda" columns="2">
+
+						<p:link onclick="start()" onerror="stop()" onsuccess="stop()"
+							styleClass="btn btn-default btn-xs glyphicon glyphicon-edit"
+							outcome="/main/exame_cadastro" icon="fa fa-pencil">
+							<f:param name="ex" value="#{exam.id}" />
+						</p:link>
+
+						<p:commandLink onclick="start()" onerror="stop()"
+							onsuccess="stop()" update="tbl_exam"
+							action="#{exam_bean.remove()}" style="color:#fff"
+							styleClass="btn btn-danger btn-xs glyphicon glyphicon-remove-circle">
+							<f:setPropertyActionListener value="#{exam}"
+								target="#{exam_bean.exam}" />
+							<p:confirm header="Confirmar exclusão" icon="ui-icon-alert"
+								message="Excluir exame?" />
+
+						</p:commandLink>
+					</p:panelGrid>
+				</p:column>
+
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+
+
+	<ui:define name="adicionais">
+
+		<p:dialog modal="true" style="z-index:1000" widgetVar="statusDialog"
+			showHeader="false" draggable="false" closable="false"
+			resizable="false">
+			<p:graphicImage library="algaworks" name="images/aguarde.gif" />
+		</p:dialog>
+
+		<p:dialog widgetVar="dlg_edicao_exame" width="40%" modal="true"
+			closable="true" closeOnEscape="true" header="Edição de exame">
+			<h:form id="frm_edicao">
+
+				<p:panelGrid id="panel_fast_exam" columns="2" style="width:100%">
+					<p:outputLabel value="Exame:" />
+					<p:autoComplete id="exam_complet" size="50" style="width:96%"
+						placeholder="Digite o nome do exame" value="#{exam_bean.exam}"
+						completeMethod="#{exam_bean.completeExam}" var="exam"
+						itemLabel="#{exam.name}" itemValue="#{exam}"
+						converter="examConverter" forceSelection="true">
+						<p:ajax update="descript" event="blur" />
+					</p:autoComplete>
+
+					<p:outputLabel value="Descrição:" />
+					<p:inputTextarea id="descript" cols="60" rows="6"
+						value="#{exam_bean.exam.description}" />
+
+					<p:focus context="panel_fast_exam" />
+
+				</p:panelGrid>
+				<p:separator></p:separator>
+
+				<div style="width: 100%; text-align: center;">
+					<p:commandLink style="color:#fff;width:125px"
+						styleClass="btn btn-primary btn-xs glyphicon glyphicon-floppy-saved"
+						update=":frm_edicao" onclick="start()" onerror="stop()"
+						onsuccess="stop()" action="#{exam_bean.saveFaseExam()}">
+						<span style="font-family: Arial; margin-right: 15px">Salvar</span>
+					</p:commandLink>
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
